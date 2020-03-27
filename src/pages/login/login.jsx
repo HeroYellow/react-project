@@ -5,10 +5,29 @@ import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import "./css/login.less";
 import login from "./img/logo.png";
 
+// 引入登录模块
+import { ajaxLogin } from "../ajax";
+
 export default class Login extends Component {
-  onFinish = values => {
-    console.log("Received values of form: ", values);
+  // 密码验证
+  pwdValidator = (_, password = "") => {
+    let errmsg = [];
+    if (!password.trim()) errmsg.push("密码不能为空！");
+    if (password.trim().length < 4) errmsg.push("密码的长度不能小于4位！");
+    if (password.trim().length > 12) errmsg.push("密码的长度不能大于12位");
+    if (!/^\w+$/.test(password))
+      errmsg.push("密码必须由英文、数字或下划线组成");
+    if (errmsg.length) return Promise.reject(errmsg);
+    return Promise.resolve();
   };
+
+  // 提交表单
+  onFinish = async loginObj => {
+    // 调用 ajaxLogin 并传入 输入框的值
+    let result = await ajaxLogin(loginObj);
+    console.log(result);
+  };
+
   render() {
     return (
       <div className="login">
@@ -28,7 +47,19 @@ export default class Login extends Component {
               rules={[
                 {
                   required: true,
-                  message: "用户名不能为空!"
+                  message: "用户名不能为空！"
+                },
+                {
+                  min: 4,
+                  message: "用户名必须大于等于4位！"
+                },
+                {
+                  max: 12,
+                  message: "用户名必须小于等于12位！"
+                },
+                {
+                  pattern: /^\w+$/,
+                  message: "用户名必须是英文、数字或下划线组成！"
                 }
               ]}
             >
@@ -41,8 +72,7 @@ export default class Login extends Component {
               name="password"
               rules={[
                 {
-                  required: true,
-                  message: "密码不能为空!"
+                  validator: this.pwdValidator
                 }
               ]}
             >
