@@ -1,0 +1,48 @@
+.admin-header {
+  height: 80px;
+  padding: 0;
+  background-color: #fff;
+  .header-hd {
+    height: 40px;
+    border-bottom: 1px solid #1da57a;
+    text-align: right;
+    line-height: 40px;
+    .welcome-user {
+      margin-left: 10px;
+    }
+  }
+  .header-bd {
+    display: flex;
+    height: 40px;
+    line-height: 40px;
+    .header-bd-left {
+      position: relative;
+      width: 25%;
+      text-align: center;
+      span {
+        font-size: 20px;
+      }
+      &::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 100%;
+        margin-left: -20px;
+        border-top: 20px solid #fff;
+        border-right: 20px solid transparent;
+        border-bottom: 20px solid transparent;
+        border-left: 20px solid transparent;
+      }
+    }
+    .header-bd-right {
+      width: 75%;
+      padding-right: 10px;
+      text-align: right;
+      img {
+        width: 20px;
+        height: 20px;
+        margin: 0 10px;
+      }
+    }
+  }
+}

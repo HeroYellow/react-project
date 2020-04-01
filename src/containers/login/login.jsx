@@ -1,14 +1,17 @@
 import React, { Component } from "react";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { connect } from "react-redux";
+import { saveUserInfoAction } from "../../redux/actions/login";
+import { Redirect } from "react-router-dom";
 
 import "./css/login.less";
 import login from "./img/logo.png";
 
 // 引入登录模块
-import { ajaxLogin } from "../ajax";
+import { ajaxLogin } from "../../ajax";
 
-export default class Login extends Component {
+class Login extends Component {
   // 密码验证
   pwdValidator = (_, password = "") => {
     let errmsg = [];
@@ -25,10 +28,17 @@ export default class Login extends Component {
   onFinish = async loginObj => {
     // 调用 ajaxLogin 并传入 输入框的值
     let result = await ajaxLogin(loginObj);
-    console.log(result);
+    const { status, data, msg } = result;
+    if (status === 0) {
+      message.success("登录成功！", 1);
+      this.props.svaeUserInfo(data);
+    } else {
+      message.error(msg);
+    }
   };
 
   render() {
+    if (this.props.isLogin) return <Redirect to="/admin" />;
     return (
       <div className="login">
         <header className="login-header">
@@ -97,3 +107,12 @@ export default class Login extends Component {
     );
   }
 }
+
+export default connect(
+  state => ({
+    isLogin: state.userInfo.isLogin
+  }),
+  {
+    svaeUserInfo: saveUserInfoAction
+  }
+)(Login);

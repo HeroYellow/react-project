@@ -34,5 +34,4 @@ axios.interceptors.response.use(
     return new Promise(() => {});
   }
 );
-
 export default axios;
